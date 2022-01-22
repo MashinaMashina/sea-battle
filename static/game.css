@@ -1,0 +1,85 @@
+.game-table {
+    width: 352px;
+    height: 352px;
+}
+.game-table .tr {
+    height: 30px;
+    clear: both;
+}
+.game-table .td {
+    float: left;
+    width: 30px;
+    height: 30px;
+    border: 2px solid #c2c2c2;
+    margin-top: -2px;
+    margin-left: -2px;
+}
+.game-table .no-border {
+    text-align: center;
+    font-size: 18px;
+    border-color: transparent;
+}
+.clickable-cell {
+    cursor: pointer;
+}
+.disabled-click .clickable-cell {
+    cursor: auto;
+}
+.game-table .has-ship {
+    position: relative;
+    z-index: 1;
+    border-color: #2222ff;
+}
+.game-table .damaged {
+    position: relative;
+    overflow: hidden;
+}
+.game-table .damaged:after {
+    content: "×";
+    position: absolute;
+    color: red;
+    font-size: 60px;
+    top: -20px;
+    left: -2px
+}
+.game-table .miss:after {
+    content: "●";
+    position: relative;
+    color: #6c6c6c;
+    font-size: 32px;
+    left: 5px;
+    top: -4px;
+}
+.prepare-ship, .prepare-ship-start {
+    background: #9b9bff;
+}
+.clickable-cell.prepare-ship-invalid {
+    background: #ff9c9c;
+}
+.parking {
+    width: 352px;
+}
+.parked-ship {
+    height: 30px;
+    margin: 5px 10px;
+    float: left;
+    border: 1px solid #c2c2c2;
+}
+.parked-ship-cell {
+    width: 30px;
+    height: 30px;
+    float: left;
+    border: 1px solid #c2c2c2;
+}
+.parked-ship.available, .parked-ship.available .parked-ship-cell {
+    border-color: #2222ff;
+}
+
+.field-container {
+    float: left;
+    width: 50%;
+}
+.field-title {
+    margin: 10px 0;
+    text-align: center;
+}
