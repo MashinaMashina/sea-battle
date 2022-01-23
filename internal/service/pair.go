@@ -31,16 +31,32 @@ func (p *pair) AddClient(client interfaces.GameClient) error {
 	}
 
 	if p.IsFree() {
-		p.SendAll(NewMessage("wait_opponent", "Ожидание подключения второго игрока"))
+		p.SendAll(NewMessage("wait_opponent_connect", "Ожидание подключения второго игрока"))
 	} else {
-		p.SendAll(NewMessage("game_start", "Начало игры"))
+		p.SendAll(NewMessage("begin_ships_install", "Начало игры"))
 	}
 
 	return nil
 }
 
-func (p *pair) SendOpponent(m interfaces.GameMessage) error {
-	return nil
+func (p *pair) GetOpponent(iamIsFirst bool) interfaces.GameClient {
+	if iamIsFirst {
+		return p.user2
+	} else {
+		return p.user1
+	}
+}
+
+func (p *pair) SendOpponent(iamIsFirst bool, m interfaces.GameMessage) error {
+	if iamIsFirst && p.user2 != nil {
+		p.user2.Send(m)
+		return nil
+	} else if !iamIsFirst && p.user1 != nil {
+		p.user1.Send(m)
+		return nil
+	} else {
+		return fmt.Errorf("dont have connected users")
+	}
 }
 
 func (p *pair) SendAll(m interfaces.GameMessage) error {

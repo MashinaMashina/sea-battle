@@ -5,7 +5,6 @@ import (
 	"github.com/gorilla/websocket"
 	"net/http"
 	"seabattle/internal/interfaces"
-	"seabattle/internal/utils/mylogger"
 )
 
 type GameServer struct {
@@ -20,8 +19,6 @@ func NewServer() *GameServer {
 
 func (gs GameServer) RegisterHandler(router *mux.Router)  {
 	router.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		mylogger.PrintGoroutines("RegisterHandler #2")
-
 		upgrader := websocket.Upgrader{}
 		upgrader.CheckOrigin = func(r *http.Request) bool {
 			return true
@@ -41,8 +38,6 @@ func (gs GameServer) RegisterHandler(router *mux.Router)  {
 
 			gs.pairs = append(gs.pairs, p)
 		}
-
-		mylogger.PrintGoroutines("RegisterHandler #3")
 	})
 }
 
@@ -53,6 +48,7 @@ func (gs GameServer) ConnectPair(c interfaces.GameClient) bool {
 				panic(err)
 				return false
 			}
+			return true
 		}
 	}
 

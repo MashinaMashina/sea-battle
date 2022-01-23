@@ -1,7 +1,8 @@
 package interfaces
 
 type GamePair interface {
-	SendOpponent(message GameMessage) error
+	SendOpponent(iamIsFirst bool, message GameMessage) error
+	GetOpponent(bool) GameClient
 	SendAll(message GameMessage) error
 	IsFree() bool
 	AddClient(client GameClient) error

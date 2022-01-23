@@ -303,14 +303,6 @@ function cellClick(cell) {
             cell.addClass('prepare-ship-start')
         }
     }
-
-    // if (hasShip(cell)) {
-    //     removeShip(cell)
-    // } else {
-    //     if (canSetShip(cell)) {
-    //         setShip(cell)
-    //     }
-    // }
 }
 
 function cellMouseover(cell) {
@@ -332,7 +324,11 @@ function cellMouseover(cell) {
 }
 
 function goToGame() {
-    gameScreen()
+    connection.write('ships_installed', {
+        cells: cellMap.map,
+    })
+
+    // gameScreen()
 }
 
 function prepareField() {
@@ -361,6 +357,12 @@ function startScreen() {
     }).on('mouseover', function (){
         cellMouseover($(this))
     })
+
+    // temp
+    let map = JSON.parse('{"0":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"1":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"2":{"0":false,"1":false,"2":true,"3":false,"4":true,"5":false,"6":true,"7":false,"8":true,"9":false,"10":true},"3":{"0":false,"1":false,"2":true,"3":false,"4":true,"5":false,"6":true,"7":false,"8":true,"9":false,"10":true},"4":{"0":false,"1":false,"2":true,"3":false,"4":true,"5":false,"6":true,"7":false,"8":false,"9":false,"10":false},"5":{"0":false,"1":false,"2":true,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":true,"10":true},"6":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"7":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":true,"9":false,"10":true},"8":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"9":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":true,"9":false,"10":true},"10":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false}}')
+    fillUserShips(prepareField(), map)
+    $('.to-game-btn').prop('disabled', false).click()
+    // end temp
 }
 
 function gameScreen() {
@@ -369,7 +371,7 @@ function gameScreen() {
     let map = JSON.parse(JSON.stringify(cellMap.map));
 
     // temp
-    map = JSON.parse('{"0":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"1":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"2":{"0":false,"1":false,"2":true,"3":false,"4":true,"5":false,"6":true,"7":false,"8":true,"9":false,"10":true},"3":{"0":false,"1":false,"2":true,"3":false,"4":true,"5":false,"6":true,"7":false,"8":true,"9":false,"10":true},"4":{"0":false,"1":false,"2":true,"3":false,"4":true,"5":false,"6":true,"7":false,"8":false,"9":false,"10":false},"5":{"0":false,"1":false,"2":true,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":true,"10":true},"6":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"7":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":true,"9":false,"10":true},"8":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"9":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":true,"9":false,"10":true},"10":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false}}')
+    //map = JSON.parse('{"0":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"1":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"2":{"0":false,"1":false,"2":true,"3":false,"4":true,"5":false,"6":true,"7":false,"8":true,"9":false,"10":true},"3":{"0":false,"1":false,"2":true,"3":false,"4":true,"5":false,"6":true,"7":false,"8":true,"9":false,"10":true},"4":{"0":false,"1":false,"2":true,"3":false,"4":true,"5":false,"6":true,"7":false,"8":false,"9":false,"10":false},"5":{"0":false,"1":false,"2":true,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":true,"10":true},"6":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"7":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":true,"9":false,"10":true},"8":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"9":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":true,"9":false,"10":true},"10":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false}}')
 
     setTitle("Выстрелите по какой-то точке на поле противника")
 
@@ -380,28 +382,84 @@ function gameScreen() {
 
     fillUserShips(app().find('#user-field'), map)
 
-    // temp
-    damageCell(4, 4, userField())
-    damageCell(3, 4, userField())
-    damageCell(3, 4, opponentField())
+    opponentField().find('.clickable-cell').on('click', function () {
+        if (canShoot) {
+            let pos = getCellPosition($(this))
 
-    missCell(7, 4, userField())
-    missCell(7, 4, opponentField())
+            connection.write('shoot', {x: pos[0], y: pos[1]})
+        }
+    })
 }
 
-function waitOpponentScreen() {
+function waitOpponentConnectScreen() {
     resetApp();
 
     setTitle("Ожидание подключения второго игрока");
     showLoading()
 }
+function waitOpponentReadyScreen() {
+    resetApp();
+
+    setTitle("Ожидание установки кораблей вторым игроком");
+    showLoading()
+}
+
+function winScreen() {
+    resetApp();
+
+    setTitle("Вы победили!");
+}
+
+function defeatScreen() {
+    resetApp();
+
+    setTitle("Вы проиграли!");
+}
+
+let canShoot = false;
+
+function registerGameEvents() {
+    connection.on('begin_ships_install', function () {
+        startScreen()
+    })
+    connection.on('wait_opponent_ready', function (data) {
+        waitOpponentReadyScreen()
+    })
+    connection.on('you_shoot', function (data) {
+        setTitle("Выстрелите по какой-то точке на поле противника")
+        canShoot = true
+    })
+    connection.on('wait_opponent_shoot', function (data) {
+        setTitle("Ожидаем выстрел противника")
+        canShoot = false
+    })
+    connection.on('game_start', function (data) {
+        gameScreen()
+    })
+    connection.on('got_fail_shoot', function (data) {
+        missCell(data.message.x, data.message.y, userField())
+    })
+    connection.on('got_success_shoot', function (data) {
+        damageCell(data.message.x, data.message.y, userField())
+    })
+    connection.on('fail_shoot', function (data) {
+        missCell(data.message.x, data.message.y, opponentField())
+    })
+    connection.on('success_shoot', function (data) {
+        damageCell(data.message.x, data.message.y, opponentField())
+    })
+    connection.on('win', function (data) {
+        winScreen()
+    })
+    connection.on('defeat', function (data) {
+        defeatScreen()
+    })
+}
 
 $(function () {
-    connect()
+    registerGameEvents()
 
+    connection.connect()
 
-    // startScreen()
-    // gameScreen()
-
-    waitOpponentScreen()
+    waitOpponentConnectScreen()
 })
