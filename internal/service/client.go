@@ -31,9 +31,6 @@ func NewClient(ws *websocket.Conn) interfaces.GameClient {
 
 	c.Listen()
 
-	m := NewMessage("hello", "is message")
-	c.Send(m)
-
 	return c
 }
 
