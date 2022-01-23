@@ -144,8 +144,6 @@ func (c *client) ShootStage() {
 }
 
 func (c *client) onMessage(m interfaces.GameMessage) {
-	c.Send(m)
-
 	switch m.GetCode() {
 	case "ships_installed":
 		c.onShipsInstalled(m)
