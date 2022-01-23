@@ -3,7 +3,6 @@ package service
 import (
 	"fmt"
 	"github.com/buger/jsonparser"
-	"log"
 	"seabattle/internal/interfaces"
 	"strconv"
 )
@@ -93,14 +92,7 @@ func (c *CellMap) Validate() error {
 func (c *CellMap) DamageCell(x, y int) error {
 	if _, ok := c.cells[x]; ok {
 		if _, ok = c.cells[x][y]; ok {
-			c.HasAliveShips()
-
-			log.Println(fmt.Sprintf("%+v", c.cells[x][y]))
 			c.cells[x][y].SetAliveCell(false)
-			log.Println(fmt.Sprintf("%+v", c.cells[x][y]))
-
-			c.HasAliveShips()
-
 			return nil
 		}
 	}
@@ -108,20 +100,12 @@ func (c *CellMap) DamageCell(x, y int) error {
 	return fmt.Errorf("cell not found")
 }
 func (c *CellMap) HasAliveShips() bool {
-	log.Println("Find alive cells")
-	n := 0
 	for _, yLayer := range c.cells {
 		for _, val := range yLayer {
 			if val.AliveCell() {
-				n++
+				return true
 			}
 		}
-	}
-
-	log.Println(n)
-
-	if n > 0 {
-		return true
 	}
 
 	return false

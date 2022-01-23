@@ -450,9 +450,11 @@ function registerGameEvents() {
     })
     connection.on('win', function (data) {
         winScreen()
+        connection.close()
     })
     connection.on('defeat', function (data) {
         defeatScreen()
+        connection.close()
     })
 }
 

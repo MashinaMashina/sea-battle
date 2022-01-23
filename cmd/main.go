@@ -5,15 +5,17 @@ import (
 	"log"
 	"net/http"
 	server2 "seabattle/internal/service"
+	"seabattle/internal/utils/mylogger"
+	"time"
 )
 
 func main() {
-	//go func() {
-	//	for {
-	//		mylogger.PrintGoroutines("interval")
-	//		time.Sleep(time.Second * 3)
-	//	}
-	//}()
+	go func() {
+		for {
+			mylogger.PrintGoroutines("interval")
+			time.Sleep(time.Second * 3)
+		}
+	}()
 
 	log.SetFlags(log.LstdFlags | log.Llongfile)
 

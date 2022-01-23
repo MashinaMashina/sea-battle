@@ -24,6 +24,10 @@ connection.connect = function () {
     }
 }
 
+connection.close = function () {
+    connection.ws.close()
+}
+
 connection.write = function(code, message) {
     connection.ws.send(JSON.stringify({code: code, message: message}))
 }

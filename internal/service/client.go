@@ -62,10 +62,10 @@ func (c *client) onShipsInstalled(m interfaces.GameMessage) {
 }
 
 func (c *client) SuccessShoot(x, y int, m interfaces.GameMessage) {
-	c.GetOpponent().GotSuccessShoot(x, y, m)
-
-	c.GetCellMap().DamageCell(x, y)
 	c.Send(NewMessage("success_shoot", m.GetMessage()))
+
+	c.GetOpponent().GotSuccessShoot(x, y, m)
+	c.GetOpponent().GetCellMap().DamageCell(x, y)
 
 	if !c.GetOpponent().GetCellMap().HasAliveShips() {
 		c.Win()
@@ -121,13 +121,11 @@ func (c *client) Win() {
 
 	c.SetStage(interfaces.StageEnd)
 	c.Send(NewMessage("win", nil))
-	c.CloseConn()
 }
 
 func (c *client) Defeat() {
 	c.SetStage(interfaces.StageEnd)
 	c.Send(NewMessage("defeat", nil))
-	c.CloseConn()
 }
 
 func (c *client) gameStart() {
