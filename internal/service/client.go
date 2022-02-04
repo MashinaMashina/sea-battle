@@ -228,8 +228,6 @@ func (c *client) readUserMessage(resMess interfaces.GameMessage) error {
 }
 
 func (c *client) readMessages() {
-	defer c.ws.Close()
-
 	for {
 		m := NewEmptyMessage()
 		err := c.readUserMessage(m)
