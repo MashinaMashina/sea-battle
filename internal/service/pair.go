@@ -73,6 +73,10 @@ func (p *pair) IsFree() bool {
 	return p.user1 == nil || p.user2 == nil
 }
 
+func (p *pair) HasOpponent() bool {
+	return !p.IsFree()
+}
+
 func (p *pair) Remove(first bool) error {
 	if first {
 		p.user1 = nil

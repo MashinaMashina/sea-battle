@@ -357,12 +357,12 @@ function startScreen() {
     }).on('mouseover', function (){
         cellMouseover($(this))
     })
+}
 
-    // temp
-    let map = JSON.parse('{"0":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"1":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"2":{"0":false,"1":false,"2":true,"3":false,"4":true,"5":false,"6":true,"7":false,"8":true,"9":false,"10":true},"3":{"0":false,"1":false,"2":true,"3":false,"4":true,"5":false,"6":true,"7":false,"8":true,"9":false,"10":true},"4":{"0":false,"1":false,"2":true,"3":false,"4":true,"5":false,"6":true,"7":false,"8":false,"9":false,"10":false},"5":{"0":false,"1":false,"2":true,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":true,"10":true},"6":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"7":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":true,"9":false,"10":true},"8":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"9":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":true,"9":false,"10":true},"10":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false}}')
+function setDefaultMap() {
+    let map = {"0":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"1":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"2":{"0":false,"1":false,"2":true,"3":false,"4":true,"5":false,"6":true,"7":false,"8":true,"9":false,"10":true},"3":{"0":false,"1":false,"2":true,"3":false,"4":true,"5":false,"6":true,"7":false,"8":true,"9":false,"10":true},"4":{"0":false,"1":false,"2":true,"3":false,"4":true,"5":false,"6":true,"7":false,"8":false,"9":false,"10":false},"5":{"0":false,"1":false,"2":true,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":true,"10":true},"6":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"7":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":true,"9":false,"10":true},"8":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"9":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":true,"9":false,"10":true},"10":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false}}
     fillUserShips(prepareField(), map)
-    $('.to-game-btn').prop('disabled', false).click()
-    // end temp
+    $('.to-game-btn').prop('disabled', false)
 }
 
 function gameScreen() {

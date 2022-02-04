@@ -149,6 +149,8 @@ func (c *client) onMessage(m interfaces.GameMessage) {
 		c.onShipsInstalled(m)
 	case "shoot":
 		c.onShoot(m)
+	case "message":
+		c.SendOpponent(m)
 	default:
 		log.Println("Got unhandled message with code:", m.GetCode())
 	}
@@ -168,6 +170,11 @@ func (c *client) GetStage() uint8 {
 }
 
 func (c *client) CloseConn() {
+	if c.pair.HasOpponent() {
+		c.SendOpponent(NewMessage("opponent_disconnected", nil))
+		c.pair.Remove(c.isFirst)
+	}
+
 	c.doneCh <- true
 }
 
@@ -197,8 +204,6 @@ func (c *client) SetFirst(isFirst bool) {
 
 func (c *client) readUserMessage(resMess interfaces.GameMessage) error {
 	_, mess, err := c.ws.ReadMessage()
-
-	//log.Println(string(mess))
 
 	if err != nil {
 		return err
@@ -243,7 +248,6 @@ func (c *client) writeMessages() {
 	for {
 		select {
 		case <- c.doneCh:
-			c.pair.Remove(c.isFirst)
 			c.doneCh <- true // for readMessages
 			log.Println("Closed writeMessages #1")
 			return

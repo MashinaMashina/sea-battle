@@ -5,6 +5,7 @@ type GamePair interface {
 	GetOpponent(bool) GameClient
 	SendAll(message GameMessage) error
 	IsFree() bool
+	HasOpponent() bool
 	AddClient(client GameClient) error
 	Remove(first bool) error
 }
