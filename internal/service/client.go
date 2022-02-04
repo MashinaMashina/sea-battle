@@ -240,7 +240,7 @@ func (c *client) readMessages() {
 			log.Println("Closed readMessages #1")
 			return
 		} else {
-			go c.onMessage(m)
+			c.onMessage(m)
 		}
 	}
 }
