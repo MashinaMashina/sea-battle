@@ -2,7 +2,12 @@ let connection = {
     events: {}
 }
 connection.connect = function () {
-    connection.ws = new WebSocket('ws://' + window.location.host + '/ws')
+    var host = window.location.host
+    if (host === '') {
+        host = 'localhost:3000'
+    }
+
+    connection.ws = new WebSocket('ws://' + host + '/ws')
 
     connection.ws.onopen = function () {
         console.log('Connected')

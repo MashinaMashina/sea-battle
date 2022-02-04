@@ -20,6 +20,8 @@ func (p *pair) AddClient(client interfaces.GameClient) error {
 		return fmt.Errorf("is not free pair")
 	}
 
+	log.Println("User connected")
+
 	client.AddPair(p)
 
 	if p.user1 == nil {

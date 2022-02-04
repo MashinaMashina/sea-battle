@@ -99,6 +99,7 @@ func (c *CellMap) DamageCell(x, y int) error {
 
 	return fmt.Errorf("cell not found")
 }
+
 func (c *CellMap) HasAliveShips() bool {
 	for _, yLayer := range c.cells {
 		for _, val := range yLayer {

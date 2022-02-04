@@ -53,7 +53,6 @@ func (c *client) onShipsInstalled(m interfaces.GameMessage) {
 	if c.GetOpponent().GetStage() != interfaces.StageReady {
 		c.Send(NewMessage("wait_opponent_ready", "Ожидание второго участника"))
 	} else {
-		c.SendAll(NewMessage("game_start", nil))
 		c.gameStart()
 	}
 }
@@ -127,6 +126,8 @@ func (c *client) Defeat() {
 
 func (c *client) gameStart() {
 	rand.Seed(time.Now().Unix())
+
+	c.SendAll(NewMessage("game_start", nil))
 
 	if rand.Intn(1) == 1 && c.isFirst {
 		c.ShootStage()
@@ -234,12 +235,12 @@ func (c *client) readMessages() {
 		err := c.readUserMessage(m)
 
 		if err != nil {
-			log.Println(err)
+			//log.Println(err)
 			c.CloseConn()
 			log.Println("Closed readMessages #1")
 			return
 		} else {
-			c.onMessage(m)
+			go c.onMessage(m)
 		}
 	}
 }
