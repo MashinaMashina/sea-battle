@@ -365,20 +365,56 @@ function setDefaultMap() {
     $('.to-game-btn').prop('disabled', false)
 }
 
+function sendReaction(link, reaction) {
+    $(link).addClass('clicked')
+    setTimeout(function () {
+        $(link).removeClass('clicked')
+    }, 50)
+
+    connection.write('message', {
+        'message': reaction,
+    })
+
+    return false;
+}
+
+function opponentReactionBar() {
+    let str = '<h3 class="field-title">Реакция противника:</h3>';
+    str += '<div class="reaction-bar opponent-reaction">'
+    str += '</div>'
+    str += clearTag()
+
+    return fieldContainer(str)
+}
+
+function myReactionBar() {
+    let str = '<h3 class="field-title">Выразите реакцию</h3>';
+    str += '<div class="reaction-bar my-reaction">'
+    str += '<a onclick="return sendReaction(this, \'😆\')" class="reaction">😆</a>'
+    str += '<a onclick="return sendReaction(this, \'😍\')" class="reaction">😍</a>'
+    str += '<a onclick="return sendReaction(this, \'🙄\')" class="reaction">🙄</a>'
+    str += '<a onclick="return sendReaction(this, \'🤪\')" class="reaction">🤪</a>'
+    str += '<a onclick="return sendReaction(this, \'😕\')" class="reaction">😕</a>'
+    str += '</div>'
+    str += clearTag()
+
+    return fieldContainer(str)
+}
+
 function gameScreen() {
     resetApp()
 
     let map = JSON.parse(JSON.stringify(cellMap.map));
-
-    // temp
-    //map = JSON.parse('{"0":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"1":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"2":{"0":false,"1":false,"2":true,"3":false,"4":true,"5":false,"6":true,"7":false,"8":true,"9":false,"10":true},"3":{"0":false,"1":false,"2":true,"3":false,"4":true,"5":false,"6":true,"7":false,"8":true,"9":false,"10":true},"4":{"0":false,"1":false,"2":true,"3":false,"4":true,"5":false,"6":true,"7":false,"8":false,"9":false,"10":false},"5":{"0":false,"1":false,"2":true,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":true,"10":true},"6":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"7":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":true,"9":false,"10":true},"8":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false},"9":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":true,"9":false,"10":true},"10":{"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false}}')
 
     setTitle("Выстрелите по какой-то точке на поле противника")
 
     let userFieldStr = '<h3 class="field-title">Ваши корабли</h3>' + getEmptyField('user-field') + clearTag();
     let opponentFieldStr = '<h3 class="field-title">Поле противника</h3>' +getEmptyField('opponent-field') + clearTag();
 
-    app().html(fieldContainer(userFieldStr, 'disabled-click') + fieldContainer(opponentFieldStr) + clearTag())
+    userFieldStr = fieldContainer(userFieldStr, 'disabled-click')
+    opponentFieldStr = fieldContainer(opponentFieldStr)
+
+    app().html(userFieldStr + opponentFieldStr + clearTag() + myReactionBar() + opponentReactionBar() + clearTag())
 
     fillUserShips(app().find('#user-field'), map)
 
@@ -414,6 +450,19 @@ function defeatScreen() {
     resetApp();
 
     setTitle("Вы проиграли!");
+}
+
+function opponentDisconnectedScreen() {
+    waitOpponentConnectScreen()
+}
+
+function gotOpponentMessage(message) {
+    let reaction = $('<span class="reaction">'+message.message+'</span>')
+    $('.opponent-reaction').append(reaction)
+
+    setTimeout(function () {
+        reaction.remove()
+    }, 1000)
 }
 
 let canShoot = false;
@@ -455,6 +504,12 @@ function registerGameEvents() {
     connection.on('defeat', function (data) {
         defeatScreen()
         connection.close()
+    })
+    connection.on('opponent_disconnected', function (data) {
+        opponentDisconnectedScreen()
+    })
+    connection.on('message', function (data) {
+        gotOpponentMessage(data.message)
     })
 }
 

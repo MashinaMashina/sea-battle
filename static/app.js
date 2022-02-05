@@ -59,3 +59,5 @@ $(function () {
         $('.loading').toggleClass('invert')
     }, 5000)
 })
+
+// TODO Оповещение о недоступности сервера

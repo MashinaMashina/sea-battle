@@ -83,3 +83,20 @@
     margin: 10px 0;
     text-align: center;
 }
+.reaction-bar {
+    text-align: center;
+}
+.reaction-bar .reaction {
+    font-size: 27px;
+    cursor: pointer;
+    transition: font-size 50ms;
+    line-height: 40px;
+    width: 40px;
+    height: 40px;
+    vertical-align: middle;
+    display: inline-block;
+    user-select: none;
+}
+.reaction-bar .reaction.clicked {
+    font-size: 35px;
+}

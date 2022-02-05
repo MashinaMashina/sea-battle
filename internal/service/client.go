@@ -173,9 +173,9 @@ func (c *client) GetStage() uint8 {
 func (c *client) CloseConn() {
 	if c.pair.HasOpponent() {
 		c.SendOpponent(NewMessage("opponent_disconnected", nil))
-		c.pair.Remove(c.isFirst)
 	}
 
+	c.pair.Remove(c.isFirst)
 	c.doneCh <- true
 }
 
@@ -235,7 +235,7 @@ func (c *client) readMessages() {
 		if err != nil {
 			//log.Println(err)
 			c.CloseConn()
-			log.Println("Closed readMessages #1")
+			//log.Println("Closed readMessages #1")
 			return
 		} else {
 			c.onMessage(m)
@@ -248,7 +248,7 @@ func (c *client) writeMessages() {
 		select {
 		case <- c.doneCh:
 			c.doneCh <- true // for readMessages
-			log.Println("Closed writeMessages #1")
+			//log.Println("Closed writeMessages #1")
 			return
 		case m := <- c.msgCh:
 			json, err := m.GetJSON()
