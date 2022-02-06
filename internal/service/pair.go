@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"seabattle/internal/interfaces"
 )
 
@@ -20,8 +20,6 @@ func (p *pair) AddClient(client interfaces.GameClient) error {
 		return fmt.Errorf("is not free pair")
 	}
 
-	log.Println("User connected")
-
 	client.AddPair(p)
 
 	if p.user1 == nil {
@@ -33,8 +31,10 @@ func (p *pair) AddClient(client interfaces.GameClient) error {
 	}
 
 	if p.IsFree() {
+		log.Infoln("User connected. Waiting opponent")
 		p.SendAll(NewMessage("wait_opponent_connect", "Ожидание подключения второго игрока"))
 	} else {
+		log.Infoln("User connected. Start a game")
 		p.SendAll(NewMessage("begin_ships_install", "Начало игры"))
 	}
 

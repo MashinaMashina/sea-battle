@@ -2,13 +2,27 @@ package main
 
 import (
 	"github.com/gorilla/mux"
-	"log"
+	"github.com/joho/godotenv"
+	log "github.com/sirupsen/logrus"
 	"net/http"
+	"os"
 	server2 "seabattle/internal/service"
 )
 
 func main() {
-	log.SetFlags(log.LstdFlags | log.Llongfile)
+	if err := godotenv.Load(); err != nil {
+		log.Fatalln(err)
+	}
+
+	level, err := log.ParseLevel(os.Getenv("SEABATTLE_LOG_LEVEL"))
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	log.SetOutput(os.Stdout)
+	log.SetLevel(level)
+
+	log.Debugln("Log level is", level)
 
 	gameServer := server2.NewServer()
 
@@ -17,5 +31,7 @@ func main() {
 
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
 
-	http.ListenAndServe(":3000", router)
+	addr := os.Getenv("SEABATTLE_ADDR")
+	log.Infoln("Starting server on address", addr)
+	http.ListenAndServe(addr, router)
 }

@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 	"seabattle/internal/interfaces"
 )
@@ -19,6 +20,8 @@ func NewServer() *GameServer {
 
 func (gs GameServer) RegisterHandler(router *mux.Router)  {
 	router.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+		log.Traceln("Create websocket connection with user")
+
 		upgrader := websocket.Upgrader{}
 		upgrader.CheckOrigin = func(r *http.Request) bool {
 			return true

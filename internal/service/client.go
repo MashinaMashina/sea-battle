@@ -3,7 +3,7 @@ package service
 import (
 	"github.com/buger/jsonparser"
 	"github.com/gorilla/websocket"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"math/rand"
 	"seabattle/internal/interfaces"
 	"time"
@@ -153,7 +153,7 @@ func (c *client) onMessage(m interfaces.GameMessage) {
 	case "message":
 		c.SendOpponent(m)
 	default:
-		log.Println("Got unhandled message with code:", m.GetCode())
+		log.Errorln("Got unhandled message with code:", m.GetCode())
 	}
 }
 
@@ -233,9 +233,9 @@ func (c *client) readMessages() {
 		err := c.readUserMessage(m)
 
 		if err != nil {
-			//log.Println(err)
+			log.Debugln(err)
 			c.CloseConn()
-			//log.Println("Closed readMessages #1")
+			log.Debugln("Closed readMessages #1")
 			return
 		} else {
 			c.onMessage(m)
@@ -248,16 +248,16 @@ func (c *client) writeMessages() {
 		select {
 		case <- c.doneCh:
 			c.doneCh <- true // for readMessages
-			//log.Println("Closed writeMessages #1")
+			log.Debugln("Closed writeMessages #1")
 			return
 		case m := <- c.msgCh:
 			json, err := m.GetJSON()
 			if err != nil {
-				log.Println("writeMessages err #1: ", err)
+				log.Errorln("writeMessages err #1: ", err)
 			}
 
 			if err := c.ws.WriteMessage(websocket.TextMessage, json); err != nil {
-				log.Println("writeMessages err #2: ", err)
+				log.Errorln("writeMessages err #2: ", err)
 			}
 		}
 	}
