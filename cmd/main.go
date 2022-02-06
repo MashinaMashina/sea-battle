@@ -8,13 +8,6 @@ import (
 )
 
 func main() {
-	//go func() {
-	//	for {
-	//		mylogger.PrintGoroutines("interval")
-	//		time.Sleep(time.Second * 3)
-	//	}
-	//}()
-
 	log.SetFlags(log.LstdFlags | log.Llongfile)
 
 	gameServer := server2.NewServer()
