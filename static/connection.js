@@ -1,16 +1,29 @@
 let connection = {
-    events: {}
+    events: {},
+    needConnect: true,
+    connectAttempts: 5,
+    connectDelay: 1500,
 }
 connection.connect = function () {
-    var host = window.location.host
+    if (typeof connection.ws != "undefined" && connection.ws.readyState === 1) {
+        connection.trigger('connected', [])
+        return;
+    }
+
+    let host = window.location.host
     if (host === '') {
         host = 'localhost:3000'
     }
+
+    connection.trigger('connect', [])
+    connection.needConnect = true;
+    connection.connectAttempts--;
 
     connection.ws = new WebSocket('ws://' + host + '/ws')
 
     connection.ws.onopen = function () {
         console.log('Connected')
+        connection.trigger('connected', [])
     }
     connection.ws.onmessage = function (event) {
         console.log(event.data);
@@ -23,9 +36,18 @@ connection.connect = function () {
     }
     connection.ws.onclose = function (event) {
         console.log('Closed', event)
+
+        connection.trigger('closed', [])
+
+        if (connection.needConnect && connection.connectAttempts) {
+            setTimeout(function () {
+                connection.connect()
+            }, connection.connectDelay)
+        }
     }
     connection.ws.onerror = function (event) {
         console.log('error', event)
+        connection.trigger('error', [])
     }
 }
 

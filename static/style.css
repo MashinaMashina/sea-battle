@@ -48,3 +48,6 @@ body {
 .loading.invert {
     transform: scale(-1, 1);
 }
+.align-center {
+    text-align: center;
+}

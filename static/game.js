@@ -444,12 +444,22 @@ function winScreen() {
     resetApp();
 
     setTitle("Вы победили!");
+
+    let str = '<div class="align-center"><img src="img/win.gif" /><br>';
+    str += '<input type="button" onclick="startGame()" value="Начать заново" class="btn btn-positive"/></div>';
+
+    app().html(str)
 }
 
 function defeatScreen() {
     resetApp();
 
     setTitle("Вы проиграли!");
+
+    let str = '<div class="align-center"><img src="img/defeat.gif" /><br>';
+    str += '<input type="button" onclick="startGame()" value="Начать заново" class="btn btn-positive"/></div>';
+
+    app().html(str)
 }
 
 function opponentDisconnectedScreen() {
@@ -463,6 +473,13 @@ function gotOpponentMessage(message) {
     setTimeout(function () {
         reaction.remove()
     }, 1000)
+}
+
+function connectionScreen() {
+    resetApp();
+
+    setTitle("Подключение к серверу...");
+    showLoading()
 }
 
 let canShoot = false;
@@ -499,10 +516,12 @@ function registerGameEvents() {
     })
     connection.on('win', function (data) {
         winScreen()
+        connection.needConnect = false;
         connection.close()
     })
     connection.on('defeat', function (data) {
         defeatScreen()
+        connection.needConnect = false;
         connection.close()
     })
     connection.on('opponent_disconnected', function (data) {
@@ -511,12 +530,21 @@ function registerGameEvents() {
     connection.on('message', function (data) {
         gotOpponentMessage(data.message)
     })
+    connection.on('connect', function () {
+        console.log('Try connect')
+    })
+    connection.on('connected', function () {
+        waitOpponentConnectScreen()
+    })
+}
+
+function startGame() {
+    connectionScreen()
+    connection.connect()
 }
 
 $(function () {
     registerGameEvents()
 
-    connection.connect()
-
-    waitOpponentConnectScreen()
+    startGame()
 })
